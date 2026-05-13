@@ -14,7 +14,15 @@ Verbalis es una aplicación web que ayuda a estudiantes de ingeniería a aprende
 
 ```
 verbalis/
-├── frontend/               # React 18 + Vite + Tailwind CSS
+├── backend/
+│   ├── main.py                        # FastAPI: configuración, CORS, registro de routers
+│   ├── routers/
+│   │   └── chat.py                    # /api/chat (streaming) y /api/chat/clear
+│   ├── knowledge_base/
+│   │   ├── software_engineering.json  # Ontología — términos, relaciones, categorías
+│   │   └── inference_rules.json       # Reglas de inferencia
+│   └── venv/                          # ignorado en git
+├── frontend/
 │   └── src/
 │       ├── pages/
 │       │   ├── Landing.jsx
@@ -23,15 +31,15 @@ verbalis/
 │       └── components/
 │           ├── Sidebar.jsx
 │           └── modules/
-│               ├── Chatbot.jsx       # Módulo 2 — implementado
-│               ├── Dictionary.jsx    # Módulo 1 — placeholder
-│               ├── LearningObjects.jsx # Módulo 3 — placeholder
-│               └── PDF.jsx           # Módulo 4 — placeholder
-├── backend/
-│   └── main.py             # FastAPI — endpoints /health, /api/chat, /api/chat/clear
-├── inference_rules.json    # Reglas de inferencia
-├── software_engineering.json # Ontología base
-└── README_DEV.md           # Guía de desarrollo local
+│               ├── Chatbot.jsx          # Módulo 2 — implementado
+│               ├── Dictionary.jsx       # Módulo 1 — placeholder
+│               ├── LearningObjects.jsx  # Módulo 3 — placeholder
+│               └── PDF.jsx              # Módulo 4 — placeholder
+├── docs/
+│   ├── guia_equipo.md                 # Instrucciones técnicas para el equipo
+│   └── reunion_equipo.md
+├── README.md
+└── README_DEV.md
 ```
 
 ---
@@ -92,13 +100,13 @@ ollama run gemma3:12b "Hello, what is an API?"
 
 ### ¿Dónde está la base de conocimiento?
 
-**1. Ontología del diccionario** (`software_engineering.json`, `/backend/knowledge_base/ontology/`)  
+**1. Ontología del diccionario** (`backend/knowledge_base/software_engineering.json`)  
 Cada carrera tiene su propio JSON estructurado con:
 - Términos con definiciones en inglés y español
 - Relaciones entre términos (`related_terms`)
 - Categorías semánticas y niveles de dificultad
 
-**2. Reglas de inferencia** (`inference_rules.json`)  
+**2. Reglas de inferencia** (`backend/knowledge_base/inference_rules.json`)  
 El sistema aplica reglas lógicas como:
 - Si el usuario busca término X → sugerir términos relacionados
 - Si el usuario falla una palabra 2 veces → reforzarla en la siguiente sesión
@@ -129,7 +137,7 @@ El módulo de aprendizaje infiere el nivel del usuario en base a su historial de
 
 ## Cómo correr el proyecto
 
-Ver [README_DEV.md](./README_DEV.md) para instrucciones detalladas.
+Ver [README_DEV.md](./README_DEV.md) para instrucciones detalladas y [docs/guia_equipo.md](./docs/guia_equipo.md) para incorporarse al proyecto.
 
 ### Resumen rápido
 ```bash

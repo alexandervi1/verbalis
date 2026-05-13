@@ -48,7 +48,7 @@ python -m venv venv
 source venv/bin/activate
 
 # Instalar dependencias
-pip install fastapi uvicorn httpx
+pip install -r requirements.txt
 
 # Correr el servidor
 uvicorn main:app --reload --port 8000
@@ -118,7 +118,7 @@ Desde `/app` el sidebar permite navegar entre:
 
 ## 5. Variables de configuración
 
-Todas en `backend/main.py`:
+Las constantes del chatbot están en `backend/routers/chat.py`:
 
 | Constante | Valor por defecto | Descripción |
 |-----------|-------------------|-------------|
@@ -141,9 +141,14 @@ Puertos:
 ```
 verbalis/
 ├── backend/
-│   ├── main.py              # API FastAPI — chat streaming, memoria de sesión
-│   ├── requirements.txt
-│   └── venv/                # Entorno virtual (ignorado en git)
+│   ├── main.py                        # FastAPI: app, CORS, include_router, /health
+│   ├── routers/
+│   │   ├── __init__.py
+│   │   └── chat.py                    # /api/chat (streaming) y /api/chat/clear
+│   ├── knowledge_base/
+│   │   ├── software_engineering.json  # Ontología de términos técnicos
+│   │   └── inference_rules.json       # Reglas de inferencia
+│   └── venv/                          # ignorado en git
 ├── frontend/
 │   ├── src/
 │   │   ├── pages/
@@ -153,15 +158,16 @@ verbalis/
 │   │   └── components/
 │   │       ├── Sidebar.jsx
 │   │       └── modules/
-│   │           ├── Chatbot.jsx        # Streaming, memoria, Markdown, bilingüe
+│   │           ├── Chatbot.jsx        # streaming, memoria, Markdown, bilingüe
 │   │           ├── Dictionary.jsx
 │   │           ├── LearningObjects.jsx
 │   │           └── PDF.jsx
-│   ├── tailwind.config.js   # Incluye animación fade-in-up
-│   ├── vite.config.js       # Proxy /api → backend
+│   ├── tailwind.config.js             # animación fade-in-up
+│   ├── vite.config.js                 # proxy /api → backend
 │   └── package.json
-├── inference_rules.json     # Reglas de inferencia
-├── software_engineering.json # Ontología base
+├── docs/
+│   ├── guia_equipo.md                 # instrucciones técnicas para el equipo
+│   └── reunion_equipo.md
 ├── .gitignore
 ├── README.md
 └── README_DEV.md
@@ -169,7 +175,22 @@ verbalis/
 
 ---
 
-## 7. Verificación rápida
+## 7. Agregar tu módulo al proyecto
+
+Cada integrante trabaja en su propio router (backend) y componente (frontend) sin tocar el código de los demás.
+
+| Tarea | Archivo a crear / modificar |
+|---|---|
+| Nuevo endpoint | `backend/routers/<tu_modulo>.py` |
+| Registrar router | `backend/main.py` — dos líneas (avisa antes de tocar este archivo) |
+| Nuevo componente | `frontend/src/components/modules/<TuModulo>.jsx` |
+| Leer la ontología | `backend/knowledge_base/software_engineering.json` |
+
+Ver [docs/guia_equipo.md](./docs/guia_equipo.md) para ejemplos de código paso a paso.
+
+---
+
+## 8. Verificación rápida
 
 Con los tres servicios corriendo (Ollama + backend + frontend):
 
@@ -192,7 +213,8 @@ curl -X POST http://localhost:8000/api/chat/clear \
 
 ## Notas del equipo
 
-- Los archivos `inference_rules.json` y `software_engineering.json` en la raíz son la base de conocimiento del proyecto. No modificarlos directamente; extender la ontología siguiendo el formato ya establecido.
+- Los archivos de la base de conocimiento están en `backend/knowledge_base/`. No modificarlos directamente; extender la ontología siguiendo el formato ya establecido.
+- Para incorporarse al proyecto ver [docs/guia_equipo.md](./docs/guia_equipo.md).
 - El `venv/` del backend está excluido de git. Cada integrante debe crearlo localmente con los pasos del punto 2.
 - El historial de sesión del chatbot es **en memoria**: se pierde al reiniciar el backend. Para persistencia real se necesitaría una base de datos.
 - La carpeta `.claude/` está excluida de git (configuración del editor).
