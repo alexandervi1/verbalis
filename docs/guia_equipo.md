@@ -18,9 +18,10 @@ cd verbalis
 Instala Ollama desde https://ollama.com, luego:
 
 ```bash
-ollama pull gemma3:12b   # solo la primera vez, descarga ~8 GB
-ollama serve             # deja esta terminal abierta
+ollama serve   # deja esta terminal abierta
 ```
+
+El modelo por defecto es `gemma4:31b-cloud` — **no requiere descarga**. Si quieres usar un modelo local, ver la sección 7.
 
 ### Levantar el backend (terminal 2)
 
@@ -336,7 +337,69 @@ async def get_related(term_id: str):
 
 ---
 
-## 7. Reglas del equipo
+## 7. Cambiar el modelo de IA
+
+El modelo que usa el backend se configura en `backend/.env`. No necesitas tocar ningún archivo de código.
+
+```bash
+# backend/.env
+OLLAMA_MODEL=gemma4:31b-cloud   # valor por defecto
+```
+
+Al clonar el repo por primera vez, crea tu `.env` desde la plantilla:
+
+```bash
+cd backend
+cp .env.example .env   # macOS / Linux
+copy .env.example .env # Windows PowerShell
+```
+
+### Opciones según tu máquina
+
+| Situación | Modelo recomendado | Requiere descarga |
+|---|---|---|
+| Setup estándar del proyecto (default) | `gemma4:31b-cloud` | **No** — corre en servidores de Ollama |
+| Máquina con GPU — modelo local potente | `gemma3:12b` | Sí — `ollama pull gemma3:12b` (~8 GB) |
+| Máquina sin GPU — modelo local ligero | `gemma3:1b` | Sí — `ollama pull gemma3:1b` |
+
+### Modelo cloud (sin descarga)
+
+Si tu máquina no puede correr un modelo local, puedes usar un modelo cloud de Ollama. Solo cambia el valor en tu `.env`:
+
+```env
+OLLAMA_MODEL=gemma4:31b-cloud
+```
+
+Ventajas del modelo cloud:
+- No ocupa espacio en disco ni RAM de tu máquina
+- No necesitas GPU
+- El servidor de Ollama (`ollama serve`) sigue siendo el mismo — el backend no cambia
+
+Desventajas:
+- Requiere conexión a internet durante el uso
+- Latencia ligeramente mayor que un modelo local
+
+### Modelo ligero local (`gemma3:1b`)
+
+Si prefieres correr todo localmente pero tu máquina es limitada:
+
+```bash
+ollama pull gemma3:1b
+```
+
+Luego en `backend/.env`:
+
+```env
+OLLAMA_MODEL=gemma3:1b
+```
+
+Es más rápido y liviano, aunque las respuestas son menos detalladas que `gemma4:31b-cloud`.
+
+> Cada integrante puede tener un `.env` diferente según su máquina. El archivo está en `.gitignore` y no se sube al repo, así que no afecta a los demás.
+
+---
+
+## 8. Reglas del equipo
 
 ### Lo que no se toca sin avisar
 

@@ -81,7 +81,7 @@ verbalis/
 
 ## Modelo de IA local
 
-**Modelo:** Gemma 3 12B  
+**Modelo por defecto:** Gemma 4 31B (cloud) — no requiere descarga  
 **Herramienta:** [Ollama](https://ollama.com)  
 **Context window:** 8 192 tokens
 
@@ -89,12 +89,14 @@ verbalis/
 ```bash
 # 1. Instalar Ollama desde https://ollama.com
 
-# 2. Descargar el modelo
-ollama pull gemma3:12b
+# 2. Iniciar el servidor (el modelo cloud no requiere descarga)
+ollama serve
 
 # 3. Verificar que corre
-ollama run gemma3:12b "Hello, what is an API?"
+curl http://localhost:11434/api/tags
 ```
+
+> Para usar un modelo local en lugar del cloud, ver la sección "Cambiar el modelo" en [docs/guia_equipo.md](./docs/guia_equipo.md).
 
 ---
 

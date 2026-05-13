@@ -7,17 +7,13 @@
 | Python | 3.11 | https://www.python.org |
 | Node.js | 18 LTS | https://nodejs.org |
 | Ollama | Última | https://ollama.com |
-| Modelo Gemma | gemma3:12b | ver paso 1 |
+| Modelo Gemma | gemma4:31b-cloud (default) | ver paso 1 |
 
 ---
 
 ## 1. Ollama — modelo de lenguaje
 
-Descarga el modelo:
-
-```bash
-ollama pull gemma3:12b
-```
+El modelo por defecto es `gemma4:31b-cloud`, que corre en servidores de Ollama. **No requiere descarga.**
 
 Inicia el servidor (por defecto escucha en http://localhost:11434):
 
@@ -28,7 +24,14 @@ ollama serve
 Prueba rápida:
 
 ```bash
-curl http://localhost:11434/api/generate -d '{"model":"gemma3:12b","prompt":"hello","stream":false}'
+curl http://localhost:11434/api/generate -d '{"model":"gemma4:31b-cloud","prompt":"hello","stream":false}'
+```
+
+Si prefieres un modelo local (requiere descarga previa):
+
+```bash
+ollama pull gemma3:12b   # ~8 GB
+# luego editar backend/.env → OLLAMA_MODEL=gemma3:12b
 ```
 
 ---
@@ -110,7 +113,7 @@ Landing  →  Selección de carrera  →  App principal
 
 Desde `/app` el sidebar permite navegar entre:
 - **Diccionario** — búsqueda de términos técnicos
-- **Chatbot** — chat con gemma3:12b, system prompt bilingüe adaptado a la carrera
+- **Chatbot** — chat con gemma4:31b-cloud (default), system prompt bilingüe adaptado a la carrera
 - **Objetos de aprendizaje** — lecciones y ejercicios
 - **PDF** — visor de documentos técnicos
 
@@ -130,11 +133,12 @@ copy .env.example .env # Windows
 
 | Variable | Valor por defecto | Descripción |
 |----------|-------------------|-------------|
-| `OLLAMA_MODEL` | `gemma3:12b` | Modelo que usa Ollama — editar `.env` para cambiarlo |
+| `OLLAMA_MODEL` | `gemma4:31b-cloud` | Modelo que usa Ollama — editar `.env` para cambiarlo |
 
-Para usar otro modelo (por ejemplo uno más ligero):
+Para usar un modelo local en lugar del cloud:
 ```env
-OLLAMA_MODEL=llama3.2:3b
+OLLAMA_MODEL=gemma3:12b   # requiere: ollama pull gemma3:12b
+OLLAMA_MODEL=gemma3:1b    # más ligero: ollama pull gemma3:1b
 ```
 
 ### Constantes internas (`backend/routers/chat.py`)
