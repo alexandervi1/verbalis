@@ -50,11 +50,11 @@ verbalis/
 
 | Persona | Módulo | Responsabilidad |
 |--------|--------|----------------|
-| **[Tu nombre]** | Base + Coordinación | Estructura del repo, base de conocimiento (ontología), integración Ollama, sidebar |
-| **Persona 2** | Diccionario | Búsqueda, visualización de términos, relaciones ontológicas |
-| **Persona 3** | Chatbot | Interfaz de chat, prompts, memoria de sesión |
-| **Persona 4** | Objetos de aprendizaje | Flashcards, quizes, reglas de refuerzo |
-| **Persona 5** | PDF | Visor de PDF, selección de texto, panel de definición |
+| **Alex** | Base + Coordinación | Estructura del repo, base de conocimiento (ontología), integración Ollama, sidebar |
+| **Segovia** | Diccionario | Búsqueda, visualización de términos, relaciones ontológicas |
+| **Alex** | Chatbot | Interfaz de chat, prompts, memoria de sesión |
+| **Omar** | Objetos de aprendizaje | Flashcards, quizes, reglas de refuerzo |
+| **Fleshman** | PDF | Visor de PDF, selección de texto, panel de definición |
 
 ---
 
