@@ -2,13 +2,17 @@ from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import Dict, List
+from dotenv import load_dotenv
 import httpx
 import json
+import os
+
+load_dotenv()
 
 router = APIRouter(prefix="/api")
 
 OLLAMA_URL = "http://localhost:11434"
-MODEL = "gemma3:12b"
+MODEL = os.getenv("OLLAMA_MODEL", "gemma3:12b")
 MAX_HISTORY = 10
 
 BILINGUAL_RULES = (
@@ -41,6 +45,10 @@ ANTI_HALLUCINATION_RULES = (
     "de Software. Te sugiero consultar a un tutor especializado en ese tema.' "
     "Do not answer questions about unrelated fields, general trivia, or topics outside technical "
     "English for engineering.\n"
+    "4. If a word or term does not have a real, verifiable technical meaning in software engineering, "
+    "you MUST respond that it is not a technical term and redirect the user. Never invent or fabricate "
+    "technical meanings for non-technical words. When in doubt, say you are not sure and recommend "
+    "checking official documentation. This is a strict rule with no exceptions.\n"
 )
 
 SYSTEM_PROMPTS = {
