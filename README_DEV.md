@@ -118,15 +118,33 @@ Desde `/app` el sidebar permite navegar entre:
 
 ## 5. Variables de configuración
 
-Las constantes del chatbot están en `backend/routers/chat.py`:
+### Variable de entorno
 
-| Constante | Valor por defecto | Descripción |
-|-----------|-------------------|-------------|
+El modelo se configura en `backend/.env` (ignorado por git). Al clonar el repo por primera vez:
+
+```bash
+cd backend
+cp .env.example .env   # macOS / Linux
+copy .env.example .env # Windows
+```
+
+| Variable | Valor por defecto | Descripción |
+|----------|-------------------|-------------|
+| `OLLAMA_MODEL` | `gemma3:12b` | Modelo que usa Ollama — editar `.env` para cambiarlo |
+
+Para usar otro modelo (por ejemplo uno más ligero):
+```env
+OLLAMA_MODEL=llama3.2:3b
+```
+
+### Constantes internas (`backend/routers/chat.py`)
+
+| Constante | Valor | Descripción |
+|-----------|-------|-------------|
 | `OLLAMA_URL` | `http://localhost:11434` | URL del servidor Ollama |
-| `MODEL` | `gemma3:12b` | Modelo a usar |
 | `MAX_HISTORY` | `10` | Máximo de mensajes del historial enviados a Ollama |
-| `num_ctx` | `8192` | Context window en tokens (en `options` del payload) |
-| `temperature` | `0.3` | Creatividad del modelo — valor bajo para respuestas precisas |
+| `num_ctx` | `8192` | Context window en tokens |
+| `temperature` | `0.3` | Creatividad del modelo — bajo para respuestas precisas |
 
 Puertos:
 
@@ -149,6 +167,8 @@ verbalis/
 │   ├── knowledge_base/
 │   │   ├── software_engineering.json  # Ontología de términos técnicos
 │   │   └── inference_rules.json       # Reglas de inferencia
+│   ├── .env                           # variables de entorno locales (ignorado en git)
+│   ├── .env.example                   # plantilla — copiar como .env al clonar
 │   └── venv/                          # ignorado en git
 ├── frontend/
 │   ├── src/

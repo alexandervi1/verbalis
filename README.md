@@ -21,6 +21,8 @@ verbalis/
 │   ├── knowledge_base/
 │   │   ├── software_engineering.json  # Ontología — términos, relaciones, categorías
 │   │   └── inference_rules.json       # Reglas de inferencia
+│   ├── .env                           # variables locales (ignorado en git)
+│   ├── .env.example                   # plantilla del .env
 │   └── venv/                          # ignorado en git
 ├── frontend/
 │   └── src/
