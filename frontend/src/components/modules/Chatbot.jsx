@@ -160,11 +160,19 @@ export default function Chatbot({ career }) {
                     ul: ({ children }) => <ul className="list-disc list-inside mb-2 space-y-1">{children}</ul>,
                     ol: ({ children }) => <ol className="list-decimal list-inside mb-2 space-y-1">{children}</ol>,
                     li: ({ children }) => <li>{children}</li>,
-                    code: ({ inline, className, children }) =>
+                    pre: ({ children }) => {
+                      const child = Array.isArray(children) ? children[0] : children
+                      return (
+                        <CodeBlock className={child?.props?.className}>
+                          {child?.props?.children}
+                        </CodeBlock>
+                      )
+                    },
+                    code: ({ inline, children }) =>
                       inline ? (
                         <code className="bg-slate-900/80 text-blue-300 px-1.5 py-0.5 rounded text-xs font-mono">{children}</code>
                       ) : (
-                        <CodeBlock className={className}>{children}</CodeBlock>
+                        <code>{children}</code>
                       ),
                   }}
                 >

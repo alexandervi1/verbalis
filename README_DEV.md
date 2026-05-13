@@ -126,6 +126,7 @@ Las constantes del chatbot están en `backend/routers/chat.py`:
 | `MODEL` | `gemma3:12b` | Modelo a usar |
 | `MAX_HISTORY` | `10` | Máximo de mensajes del historial enviados a Ollama |
 | `num_ctx` | `8192` | Context window en tokens (en `options` del payload) |
+| `temperature` | `0.3` | Creatividad del modelo — valor bajo para respuestas precisas |
 
 Puertos:
 

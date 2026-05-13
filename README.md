@@ -167,6 +167,8 @@ Abrir **http://localhost:5173**
 - Respuestas en streaming en tiempo real (tokens conforme se generan)
 - Memoria de sesión: historial de hasta 10 mensajes enviados a Ollama en cada request
 - System prompt bilingüe pedagógico: detecta el idioma del usuario y responde en el mismo idioma, mostrando siempre los términos técnicos en inglés con su traducción al español entre paréntesis
+- Reglas anti-alucinación: el modelo declara incertidumbre explícitamente, no inventa librerías ni código, y redirige preguntas fuera del dominio
+- Temperatura 0.3: respuestas más precisas y consistentes
 - Renderizado de Markdown: negritas, listas, bloques de código con header de lenguaje y botón de copiar
 - Botón para limpiar el historial de la sesión
 - Contador de mensajes de sesión (N/10)

@@ -26,6 +26,23 @@ BILINGUAL_RULES = (
     "Never force the user to switch languages.\n"
 )
 
+ANTI_HALLUCINATION_RULES = (
+    "ACCURACY RULES (follow strictly):\n"
+    "1. If you are not fully certain about a definition, a code example, a library name, "
+    "or any technical fact, say explicitly: "
+    "'No estoy seguro de esto, te recomiendo verificarlo en la documentación oficial' "
+    "(or in English: 'I am not fully certain about this — please verify it in the official documentation'). "
+    "Never guess or fabricate technical information.\n"
+    "2. Never invent library names, function names, API endpoints, or code examples that you are not "
+    "certain exist. If you provide a code snippet, only use syntax and APIs you are confident are real "
+    "and correct. If in doubt, describe the concept in plain language instead of writing code.\n"
+    "3. If the user's question is outside the domain of this career specialization, do not attempt to "
+    "answer it. Instead, redirect the user. Example: 'Esa pregunta está fuera del área de Ingeniería "
+    "de Software. Te sugiero consultar a un tutor especializado en ese tema.' "
+    "Do not answer questions about unrelated fields, general trivia, or topics outside technical "
+    "English for engineering.\n"
+)
+
 SYSTEM_PROMPTS = {
     "software_engineering": (
         "You are a bilingual technical English tutor specialized in Software Engineering. "
@@ -34,6 +51,8 @@ SYSTEM_PROMPTS = {
         "version control, agile methodologies, testing, DevOps, and software design patterns. "
         "Keep responses concise, educational, and relevant to software engineering practice.\n\n"
         + BILINGUAL_RULES
+        + "\n"
+        + ANTI_HALLUCINATION_RULES
     ),
     "electronics": (
         "You are a bilingual technical English tutor specialized in Electronics Engineering. "
@@ -42,6 +61,8 @@ SYSTEM_PROMPTS = {
         "digital and analog electronics, sensors, PCB design, power systems, and embedded systems. "
         "Keep responses concise, educational, and relevant to electronics engineering practice.\n\n"
         + BILINGUAL_RULES
+        + "\n"
+        + ANTI_HALLUCINATION_RULES
     ),
 }
 
@@ -50,6 +71,8 @@ DEFAULT_SYSTEM_PROMPT = (
     "Help students learn technical English vocabulary and concepts across engineering disciplines. "
     "Keep responses concise and educational.\n\n"
     + BILINGUAL_RULES
+    + "\n"
+    + ANTI_HALLUCINATION_RULES
 )
 
 sessions: Dict[str, List[dict]] = {}
@@ -82,7 +105,7 @@ async def chat(request: ChatRequest):
         "model": MODEL,
         "messages": [{"role": "system", "content": system_prompt}] + history[-MAX_HISTORY:],
         "stream": True,
-        "options": {"num_ctx": 8192},
+        "options": {"num_ctx": 8192, "temperature": 0.3},
     }
 
     tokens: List[str] = []
