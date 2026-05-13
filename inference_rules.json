@@ -1,0 +1,127 @@
+{
+  "version": "1.0.0",
+  "description": "Reglas de inferencia del sistema Verbalis — Base de Conocimiento",
+  "rules": [
+    {
+      "rule_id": "INF_001",
+      "module": "dictionary",
+      "name": "Sugerencia de términos relacionados",
+      "description": "Cuando el usuario busca un término, el sistema sugiere automáticamente los términos relacionados definidos en la ontología.",
+      "condition": {
+        "trigger": "user_searches_term",
+        "input": "term_id"
+      },
+      "action": {
+        "type": "suggest",
+        "output": "term.related_terms",
+        "max_suggestions": 5
+      },
+      "justification": "Representación del conocimiento: las relaciones entre términos son parte explícita de la ontología."
+    },
+    {
+      "rule_id": "INF_002",
+      "module": "dictionary",
+      "name": "Ordenamiento por dificultad",
+      "description": "Cuando hay múltiples resultados de búsqueda, se priorizan los términos de menor dificultad.",
+      "condition": {
+        "trigger": "search_returns_multiple_results",
+        "input": "list_of_terms"
+      },
+      "action": {
+        "type": "sort",
+        "order": ["beginner", "intermediate", "advanced"]
+      },
+      "justification": "Razonamiento sobre el estado del usuario: se asume que un estudiante necesita base antes de conceptos avanzados."
+    },
+    {
+      "rule_id": "INF_003",
+      "module": "learning",
+      "name": "Refuerzo por fallos repetidos",
+      "description": "Si el usuario falla la misma palabra 2 veces en un quiz, esa palabra se agrega al final de la sesión actual para refuerzo.",
+      "condition": {
+        "trigger": "user_fails_term",
+        "threshold": 2,
+        "input": "term_id"
+      },
+      "action": {
+        "type": "re_queue",
+        "target": "end_of_session"
+      },
+      "justification": "Inferencia sobre el nivel de conocimiento del usuario basada en su historial de respuestas."
+    },
+    {
+      "rule_id": "INF_004",
+      "module": "learning",
+      "name": "Marcado de término aprendido",
+      "description": "Si el usuario responde correctamente una palabra 3 veces consecutivas, se marca como aprendida y no vuelve a aparecer en la sesión.",
+      "condition": {
+        "trigger": "user_answers_correctly_consecutive",
+        "threshold": 3,
+        "input": "term_id"
+      },
+      "action": {
+        "type": "mark_as_learned",
+        "remove_from_queue": true
+      },
+      "justification": "Razonamiento sobre dominio del conocimiento: la repetición exitosa implica aprendizaje."
+    },
+    {
+      "rule_id": "INF_005",
+      "module": "pdf",
+      "name": "Consulta prioritaria a la ontología",
+      "description": "Cuando el usuario selecciona texto en un PDF, el sistema primero busca el término en la ontología. Solo si no lo encuentra, consulta al modelo de IA.",
+      "condition": {
+        "trigger": "user_selects_text_in_pdf",
+        "input": "selected_text"
+      },
+      "action": {
+        "type": "conditional_lookup",
+        "steps": [
+          {
+            "step": 1,
+            "action": "search_ontology",
+            "if_found": "return_structured_definition"
+          },
+          {
+            "step": 2,
+            "action": "query_ai_model",
+            "condition": "if_not_found_in_ontology",
+            "prompt_template": "Define '{term}' in the context of {domain}. Provide: literal definition, contextual meaning, and one example."
+          }
+        ]
+      },
+      "justification": "La ontología actúa como capa de conocimiento explícito. El modelo de IA es el razonador de respaldo para conocimiento implícito."
+    },
+    {
+      "rule_id": "INF_006",
+      "module": "chatbot",
+      "name": "Instanciación por dominio",
+      "description": "Al seleccionar una carrera, el chatbot recibe un prompt de sistema que restringe su dominio de respuesta.",
+      "condition": {
+        "trigger": "user_selects_career",
+        "input": "career_id"
+      },
+      "action": {
+        "type": "set_system_prompt",
+        "template": "You are a technical English assistant specialized in {career_label}. Only respond about terminology and concepts related to that field. If asked about unrelated topics, politely redirect to {career_label} terminology."
+      },
+      "justification": "Sistema experto: el agente opera dentro de un dominio de conocimiento acotado y definido por reglas."
+    },
+    {
+      "rule_id": "INF_007",
+      "module": "chatbot",
+      "name": "Memoria de sesión",
+      "description": "El chatbot mantiene el historial de mensajes de la sesión actual para respuestas contextuales.",
+      "condition": {
+        "trigger": "user_sends_message",
+        "input": "user_message"
+      },
+      "action": {
+        "type": "include_history",
+        "max_messages": 10,
+        "format": "ollama_messages_array"
+      },
+      "justification": "Razonamiento encadenado: cada respuesta considera el contexto de la conversación previa."
+    }
+  ]
+}

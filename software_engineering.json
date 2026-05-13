@@ -1,0 +1,184 @@
+{
+  "domain": "software_engineering",
+  "label": "Ingeniería de Software",
+  "version": "1.0.0",
+  "terms": [
+    {
+      "id": "term_001",
+      "term": "API",
+      "full_form": "Application Programming Interface",
+      "definition_en": "A set of rules and protocols that allows different software applications to communicate with each other.",
+      "definition_es": "Conjunto de reglas y protocolos que permite que diferentes aplicaciones de software se comuniquen entre sí.",
+      "category": "architecture",
+      "difficulty": "intermediate",
+      "related_terms": ["term_002", "term_003", "term_004"],
+      "examples": [
+        "A weather app uses a REST API to fetch temperature data.",
+        "GitHub provides an API to manage repositories programmatically."
+      ],
+      "tags": ["web", "integration", "backend"]
+    },
+    {
+      "id": "term_002",
+      "term": "Endpoint",
+      "full_form": null,
+      "definition_en": "A specific URL in an API where requests can be sent to access or manipulate a resource.",
+      "definition_es": "Una URL específica en una API donde se pueden enviar solicitudes para acceder o manipular un recurso.",
+      "category": "web",
+      "difficulty": "intermediate",
+      "related_terms": ["term_001", "term_003"],
+      "examples": [
+        "The endpoint /users/123 retrieves data for the user with ID 123.",
+        "POST /api/login is the endpoint for user authentication."
+      ],
+      "tags": ["web", "REST", "backend"]
+    },
+    {
+      "id": "term_003",
+      "term": "REST",
+      "full_form": "Representational State Transfer",
+      "definition_en": "An architectural style for designing networked applications, using HTTP requests to access and manipulate data.",
+      "definition_es": "Un estilo arquitectónico para diseñar aplicaciones en red, utilizando solicitudes HTTP para acceder y manipular datos.",
+      "category": "architecture",
+      "difficulty": "intermediate",
+      "related_terms": ["term_001", "term_002", "term_005"],
+      "examples": [
+        "A REST API uses GET, POST, PUT, and DELETE methods.",
+        "Most modern web services are built following REST principles."
+      ],
+      "tags": ["web", "architecture", "HTTP"]
+    },
+    {
+      "id": "term_004",
+      "term": "SDK",
+      "full_form": "Software Development Kit",
+      "definition_en": "A collection of tools, libraries, and documentation that developers use to build applications for a specific platform.",
+      "definition_es": "Una colección de herramientas, bibliotecas y documentación que los desarrolladores usan para construir aplicaciones para una plataforma específica.",
+      "category": "development",
+      "difficulty": "beginner",
+      "related_terms": ["term_001"],
+      "examples": [
+        "The Android SDK provides tools to build Android apps.",
+        "Firebase SDK lets you integrate Firebase services into your app."
+      ],
+      "tags": ["tools", "development", "libraries"]
+    },
+    {
+      "id": "term_005",
+      "term": "HTTP",
+      "full_form": "HyperText Transfer Protocol",
+      "definition_en": "The foundation protocol of data communication for the World Wide Web, defining how messages are formatted and transmitted.",
+      "definition_es": "El protocolo de comunicación de datos fundamental para la World Wide Web, que define cómo se formatean y transmiten los mensajes.",
+      "category": "networking",
+      "difficulty": "beginner",
+      "related_terms": ["term_003", "term_002"],
+      "examples": [
+        "When you type a URL in a browser, it sends an HTTP GET request.",
+        "HTTP status 404 means the requested resource was not found."
+      ],
+      "tags": ["web", "networking", "protocol"]
+    },
+    {
+      "id": "term_006",
+      "term": "Frontend",
+      "full_form": null,
+      "definition_en": "The part of a software application that users interact with directly, typically the visual interface rendered in a browser.",
+      "definition_es": "La parte de una aplicación de software con la que los usuarios interactúan directamente, típicamente la interfaz visual renderizada en un navegador.",
+      "category": "development",
+      "difficulty": "beginner",
+      "related_terms": ["term_007", "term_008"],
+      "examples": [
+        "React and Vue.js are popular frontend frameworks.",
+        "The frontend handles user input, buttons, and visual design."
+      ],
+      "tags": ["web", "UI", "development"]
+    },
+    {
+      "id": "term_007",
+      "term": "Backend",
+      "full_form": null,
+      "definition_en": "The server-side part of an application responsible for business logic, database interactions, and API handling.",
+      "definition_es": "La parte del lado del servidor de una aplicación responsable de la lógica de negocio, interacciones con bases de datos y manejo de APIs.",
+      "category": "development",
+      "difficulty": "beginner",
+      "related_terms": ["term_006", "term_001", "term_009"],
+      "examples": [
+        "Python with FastAPI is commonly used for backend development.",
+        "The backend validates data before storing it in the database."
+      ],
+      "tags": ["server", "database", "development"]
+    },
+    {
+      "id": "term_008",
+      "term": "Framework",
+      "full_form": null,
+      "definition_en": "A pre-built structure or set of tools that provides a foundation for developing software applications more efficiently.",
+      "definition_es": "Una estructura preconstruida o conjunto de herramientas que proporciona una base para desarrollar aplicaciones de software de manera más eficiente.",
+      "category": "development",
+      "difficulty": "beginner",
+      "related_terms": ["term_006", "term_007"],
+      "examples": [
+        "React is a JavaScript framework for building user interfaces.",
+        "Django is a Python framework for web development."
+      ],
+      "tags": ["tools", "development", "libraries"]
+    },
+    {
+      "id": "term_009",
+      "term": "Database",
+      "full_form": null,
+      "definition_en": "An organized collection of structured data stored electronically, managed by a database management system (DBMS).",
+      "definition_es": "Una colección organizada de datos estructurados almacenados electrónicamente, gestionada por un sistema de gestión de bases de datos (DBMS).",
+      "category": "data",
+      "difficulty": "beginner",
+      "related_terms": ["term_007", "term_010"],
+      "examples": [
+        "MySQL and PostgreSQL are relational databases.",
+        "MongoDB is a NoSQL database that stores data as documents."
+      ],
+      "tags": ["data", "storage", "backend"]
+    },
+    {
+      "id": "term_010",
+      "term": "Query",
+      "full_form": null,
+      "definition_en": "A request for data or information from a database, typically written in SQL or a similar language.",
+      "definition_es": "Una solicitud de datos o información de una base de datos, típicamente escrita en SQL o un lenguaje similar.",
+      "category": "data",
+      "difficulty": "beginner",
+      "related_terms": ["term_009"],
+      "examples": [
+        "SELECT * FROM users WHERE age > 18 is a SQL query.",
+        "A query can filter, sort, or aggregate data from a database."
+      ],
+      "tags": ["data", "SQL", "database"]
+    }
+  ],
+  "categories": {
+    "architecture": "Patterns and structures for system design",
+    "web": "Concepts related to web technologies",
+    "development": "General software development concepts",
+    "networking": "Communication protocols and network concepts",
+    "data": "Data management and storage concepts"
+  },
+  "inference_rules": [
+    {
+      "rule_id": "rule_001",
+      "description": "If a user searches for a term, suggest all directly related terms",
+      "condition": "user_searches(term_X)",
+      "action": "suggest(term_X.related_terms)"
+    },
+    {
+      "rule_id": "rule_002",
+      "description": "If a term has difficulty=beginner, prioritize showing it before intermediate ones",
+      "condition": "search_results_contain_multiple_difficulties",
+      "action": "sort_by(difficulty: ['beginner', 'intermediate', 'advanced'])"
+    },
+    {
+      "rule_id": "rule_003",
+      "description": "If two terms share the same category, they are contextually related",
+      "condition": "term_X.category == term_Y.category",
+      "action": "mark_as_contextually_related(term_X, term_Y)"
+    }
+  ]
+}
