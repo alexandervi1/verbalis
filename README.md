@@ -1,44 +1,42 @@
-# 🧠 Verbalis
+# Verbalis
 ### Plataforma de aprendizaje de inglés técnico para estudiantes de ingeniería
 > Proyecto final — Asignatura: Base de Conocimiento
 
 ---
 
-## 📌 ¿Qué es Verbalis?
+## ¿Qué es Verbalis?
 
-Verbalis es una aplicación web que ayuda a estudiantes de ingeniería a aprender y comprender terminología técnica en inglés. Combina una base de conocimiento estructurada (ontología), reglas de inferencia y un modelo de IA local para ofrecer una experiencia de aprendizaje personalizada.
+Verbalis es una aplicación web que ayuda a estudiantes de ingeniería a aprender y comprender terminología técnica en inglés. Combina una base de conocimiento estructurada (ontología), reglas de inferencia y un modelo de IA local para ofrecer una experiencia de aprendizaje personalizada y bilingüe.
 
 ---
 
-## 🏗️ Arquitectura general
+## Arquitectura general
 
 ```
 verbalis/
-├── frontend/               # React + Tailwind CSS
+├── frontend/               # React 18 + Vite + Tailwind CSS
 │   └── src/
-│       ├── components/
-│       │   ├── Sidebar/        # Navegación entre módulos
-│       │   ├── Dictionary/     # Módulo 1
-│       │   ├── Chatbot/        # Módulo 2
-│       │   ├── Learning/       # Módulo 3
-│       │   └── PDF/            # Módulo 4
 │       ├── pages/
-│       ├── styles/
-│       └── utils/
-├── backend/                # FastAPI (Python)
-│   ├── routers/            # Endpoints por módulo
-│   ├── models/             # Modelos de datos
-│   ├── services/           # Lógica de negocio
-│   └── knowledge_base/
-│       ├── ontology/       # JSONs de la base de conocimiento
-│       └── rules/          # Reglas de inferencia
-├── docs/                   # Documentación del proyecto
-└── scripts/                # Scripts de utilidad
+│       │   ├── Landing.jsx
+│       │   ├── CareerSelect.jsx
+│       │   └── MainApp.jsx
+│       └── components/
+│           ├── Sidebar.jsx
+│           └── modules/
+│               ├── Chatbot.jsx       # Módulo 2 — implementado
+│               ├── Dictionary.jsx    # Módulo 1 — placeholder
+│               ├── LearningObjects.jsx # Módulo 3 — placeholder
+│               └── PDF.jsx           # Módulo 4 — placeholder
+├── backend/
+│   └── main.py             # FastAPI — endpoints /health, /api/chat, /api/chat/clear
+├── inference_rules.json    # Reglas de inferencia
+├── software_engineering.json # Ontología base
+└── README_DEV.md           # Guía de desarrollo local
 ```
 
 ---
 
-## 👥 División de trabajo
+## División de trabajo
 
 | Persona | Módulo | Responsabilidad |
 |--------|--------|----------------|
@@ -50,7 +48,7 @@ verbalis/
 
 ---
 
-## 🗓️ Cronograma
+## Cronograma
 
 ### Semana 1 — Fundamentos
 - [ ] Todos: clonar el repo, instalar dependencias, correr el proyecto base
@@ -71,15 +69,15 @@ verbalis/
 
 ---
 
-## 🤖 Modelo de IA local
+## Modelo de IA local
 
-**Modelo:** Gemma 3 12B (cuantizado Q4)
-**Herramienta:** [Ollama](https://ollama.com)
+**Modelo:** Gemma 3 12B  
+**Herramienta:** [Ollama](https://ollama.com)  
+**Context window:** 8 192 tokens
 
 ### Instalación rápida
 ```bash
-# 1. Instalar Ollama
-curl -fsSL https://ollama.com/install.sh | sh
+# 1. Instalar Ollama desde https://ollama.com
 
 # 2. Descargar el modelo
 ollama pull gemma3:12b
@@ -88,105 +86,68 @@ ollama pull gemma3:12b
 ollama run gemma3:12b "Hello, what is an API?"
 ```
 
-### Cómo llamar al modelo desde el backend
-```python
-import httpx
-
-async def query_ollama(prompt: str, context: str = "") -> str:
-    system_prompt = f"""You are a technical English assistant specialized in {context}.
-    Only respond about terminology and concepts related to that field.
-    Always provide: literal definition, contextual meaning, and one example."""
-    
-    response = await httpx.post("http://localhost:11434/api/generate", json={
-        "model": "gemma3:12b",
-        "prompt": prompt,
-        "system": system_prompt,
-        "stream": False
-    })
-    return response.json()["response"]
-```
-
 ---
 
-## 🧠 Justificación académica — Base de Conocimiento
+## Justificación académica — Base de Conocimiento
 
 ### ¿Dónde está la base de conocimiento?
 
-**1. Ontología del diccionario** (`/backend/knowledge_base/ontology/`)
+**1. Ontología del diccionario** (`software_engineering.json`, `/backend/knowledge_base/ontology/`)  
 Cada carrera tiene su propio JSON estructurado con:
 - Términos con definiciones en inglés y español
 - Relaciones entre términos (`related_terms`)
-- Categorías semánticas
-- Niveles de dificultad
-- Etiquetas para búsqueda facetada
+- Categorías semánticas y niveles de dificultad
 
-Esto no es una lista plana de palabras. Es una **representación del conocimiento** con relaciones explícitas entre conceptos.
-
-**2. Reglas de inferencia** (`/backend/knowledge_base/rules/`)
+**2. Reglas de inferencia** (`inference_rules.json`)  
 El sistema aplica reglas lógicas como:
 - Si el usuario busca término X → sugerir términos relacionados
 - Si el usuario falla una palabra 2 veces → reforzarla en la siguiente sesión
 - Si una palabra aparece en un PDF y está en la ontología → usar definición estructurada en vez del modelo
 
-**3. Sistema experto en el chatbot**
-El prompt invisible que instancia el chatbot según la carrera elegida actúa como un **sistema de reglas de dominio**. Define el alcance del agente y sus restricciones de respuesta.
+**3. Sistema experto en el chatbot**  
+El system prompt bilingüe que instancia el chatbot según la carrera elegida actúa como un **sistema de reglas de dominio**. Define el alcance del agente, sus restricciones de respuesta y las reglas pedagógicas para la enseñanza gradual del vocabulario técnico en inglés.
 
-**4. Razonamiento en objetos de aprendizaje**
+**4. Razonamiento en objetos de aprendizaje**  
 El módulo de aprendizaje infiere el nivel del usuario en base a su historial de respuestas y adapta el contenido (más fácil, más difícil, repaso).
 
 ---
 
-## 🛠️ Stack tecnológico
+## Stack tecnológico
 
 | Capa | Tecnología |
 |------|-----------|
-| Frontend | React 18 + Tailwind CSS |
+| Frontend | React 18 + Vite + Tailwind CSS |
+| Renderizado Markdown | react-markdown |
 | Backend | FastAPI (Python 3.11+) |
-| IA local | Ollama + Gemma 3 12B Q4 |
+| Cliente HTTP async | httpx |
+| IA local | Ollama + Gemma 3 12B |
 | Base de conocimiento | JSON estructurado (ontología) |
 | Visor PDF | pdf.js |
-| Base de datos | SQLite (solo si se necesita persistencia) |
 | Control de versiones | Git + GitHub |
 
 ---
 
-## ⚙️ Cómo correr el proyecto
+## Cómo correr el proyecto
 
-### Requisitos
-- Node.js 18+
-- Python 3.11+
-- Ollama instalado con gemma3:12b descargado
+Ver [README_DEV.md](./README_DEV.md) para instrucciones detalladas.
 
-### Backend
+### Resumen rápido
 ```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install fastapi uvicorn httpx python-multipart
-uvicorn main:app --reload
+# Terminal 1 — Ollama
+ollama serve
+
+# Terminal 2 — Backend
+cd backend && .\venv\Scripts\Activate.ps1 && uvicorn main:app --reload
+
+# Terminal 3 — Frontend
+cd frontend && npm run dev
 ```
 
-### Frontend
-```bash
-cd frontend
-npm install
-npm run dev
-```
+Abrir **http://localhost:5173**
 
 ---
 
-## 📋 Reglas del equipo (leer antes de codear)
-
-1. **Una rama por módulo:** `feature/dictionary`, `feature/chatbot`, `feature/learning`, `feature/pdf`
-2. **No tocar código ajeno** sin avisar primero en el grupo
-3. **Commits descriptivos:** `feat: agregar búsqueda por categoría en diccionario`
-4. **Si algo de la base no está listo**, avisa al coordinador, no lo inventes por tu cuenta
-5. **Cada módulo tiene su propio router** en `/backend/routers/` y su propia carpeta en `/frontend/src/components/`
-6. **Preguntas técnicas** → abrir un Issue en GitHub, no solo por WhatsApp
-
----
-
-## 📄 Módulos — Descripción rápida
+## Módulos — Estado actual
 
 ### Módulo 1: Diccionario
 - Lista de términos técnicos filtrada por carrera
@@ -194,23 +155,36 @@ npm run dev
 - Card con: término, definición EN, botón traducir (ES), términos relacionados
 - Sin IA: solo consulta a la ontología JSON
 
-### Módulo 2: Chatbot
-- Interfaz de chat con historial de mensajes
-- Prompt invisible precargado según carrera seleccionada
-- Respuestas del modelo Gemma 3 12B
-- Soporte texto (imágenes si alcanza el tiempo)
+### Módulo 2: Chatbot ✅ implementado
+- Respuestas en streaming en tiempo real (tokens conforme se generan)
+- Memoria de sesión: historial de hasta 10 mensajes enviados a Ollama en cada request
+- System prompt bilingüe pedagógico: detecta el idioma del usuario y responde en el mismo idioma, mostrando siempre los términos técnicos en inglés con su traducción al español entre paréntesis
+- Renderizado de Markdown: negritas, listas, bloques de código con header de lenguaje y botón de copiar
+- Botón para limpiar el historial de la sesión
+- Contador de mensajes de sesión (N/10)
+- Mensajes de error visibles con estilo diferenciado
 
 ### Módulo 3: Objetos de aprendizaje
 - Flashcards de vocabulario
-- Quiz de opción múltiple (preguntas generadas por IA)
+- Quiz de opción múltiple
 - Completar la frase
 - Regla de refuerzo: si fallas 2 veces → la palabra vuelve al final
 
 ### Módulo 4: Trabajar con PDF
 - Subir PDF y visualizarlo en pantalla
-- Seleccionar texto → panel lateral con: definición literal, definición en contexto, ejemplos
-- Campo para preguntar más a la IA sobre lo seleccionado
+- Seleccionar texto → panel lateral con definición literal, en contexto y ejemplos
 - Consulta primero la ontología; si no encuentra, va al modelo
+
+---
+
+## Reglas del equipo
+
+1. **Una rama por módulo:** `feature/dictionary`, `feature/chatbot`, `feature/learning`, `feature/pdf`
+2. **No tocar código ajeno** sin avisar primero en el grupo
+3. **Commits descriptivos:** `feat: agregar búsqueda por categoría en diccionario`
+4. **Si algo de la base no está listo**, avisa al coordinador, no lo inventes por tu cuenta
+5. **Cada módulo tiene su propio router** en `/backend/routers/` y su propia carpeta en `/frontend/src/components/modules/`
+6. **Preguntas técnicas** → abrir un Issue en GitHub
 
 ---
 

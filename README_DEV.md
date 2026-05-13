@@ -7,19 +7,19 @@
 | Python | 3.11 | https://www.python.org |
 | Node.js | 18 LTS | https://nodejs.org |
 | Ollama | Última | https://ollama.com |
-| Modelo Gemma | gemma3:12b | ver paso 3 |
+| Modelo Gemma | gemma3:12b | ver paso 1 |
 
 ---
 
 ## 1. Ollama — modelo de lenguaje
 
-Instala Ollama y descarga el modelo:
+Descarga el modelo:
 
 ```bash
 ollama pull gemma3:12b
 ```
 
-Verifica que esté corriendo (por defecto escucha en http://localhost:11434):
+Inicia el servidor (por defecto escucha en http://localhost:11434):
 
 ```bash
 ollama serve
@@ -48,7 +48,7 @@ python -m venv venv
 source venv/bin/activate
 
 # Instalar dependencias
-pip install -r requirements.txt
+pip install fastapi uvicorn httpx
 
 # Correr el servidor
 uvicorn main:app --reload --port 8000
@@ -56,8 +56,28 @@ uvicorn main:app --reload --port 8000
 
 El backend queda disponible en **http://localhost:8000**
 
-- `GET  /health`   → `{ "status": "ok" }`
-- `POST /api/chat` → `{ "message": "...", "career": "software_engineering" | "electronics" }`
+### Endpoints disponibles
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `GET` | `/health` | Verificación de estado |
+| `POST` | `/api/chat` | Chat con streaming — ver body abajo |
+| `POST` | `/api/chat/clear` | Limpia el historial de una sesión |
+
+**Body de `/api/chat`:**
+```json
+{
+  "message": "What is an API?",
+  "career": "software_engineering",
+  "session_id": "uuid-generado-en-el-frontend"
+}
+```
+La respuesta es `text/plain` en streaming (tokens conforme los genera Ollama).
+
+**Body de `/api/chat/clear`:**
+```json
+{ "session_id": "uuid-de-la-sesion" }
+```
 
 Documentación interactiva (Swagger): http://localhost:8000/docs
 
@@ -68,7 +88,7 @@ Documentación interactiva (Swagger): http://localhost:8000/docs
 ```bash
 cd frontend
 
-# Instalar dependencias de Node
+# Instalar dependencias
 npm install
 
 # Correr el servidor de desarrollo
@@ -77,7 +97,7 @@ npm run dev
 
 El frontend queda disponible en **http://localhost:5173**
 
-El proxy de Vite redirige `/api/*` → `http://localhost:8000` automáticamente, por lo que no se necesita configuración adicional para la comunicación frontend ↔ backend.
+El proxy de Vite redirige `/api/*` → `http://localhost:8000` automáticamente.
 
 ---
 
@@ -85,27 +105,34 @@ El proxy de Vite redirige `/api/*` → `http://localhost:8000` automáticamente,
 
 ```
 Landing  →  Selección de carrera  →  App principal
-  /              /carreras                /app
+  /              /career                /app
 ```
 
 Desde `/app` el sidebar permite navegar entre:
-- **Diccionario** — búsqueda de términos técnicos (placeholder)
-- **Chatbot** — chat con gemma3:12b, system prompt adaptado a la carrera elegida
-- **Objetos de aprendizaje** — lecciones y ejercicios (placeholder)
-- **PDF** — visor de documentos técnicos (placeholder)
+- **Diccionario** — búsqueda de términos técnicos
+- **Chatbot** — chat con gemma3:12b, system prompt bilingüe adaptado a la carrera
+- **Objetos de aprendizaje** — lecciones y ejercicios
+- **PDF** — visor de documentos técnicos
 
 ---
 
-## 5. Variables de entorno
+## 5. Variables de configuración
 
-Por defecto los servicios corren en estos puertos. Si necesitas cambiarlos:
+Todas en `backend/main.py`:
 
-| Variable | Valor por defecto | Dónde cambiar |
-|---|---|---|
-| Backend port | `8000` | argumento `--port` en uvicorn |
-| Frontend port | `5173` | `vite.config.js` → `server.port` |
-| Ollama URL | `http://localhost:11434` | `backend/main.py` → `OLLAMA_URL` |
-| Modelo | `gemma3:12b` | `backend/main.py` → `MODEL` |
+| Constante | Valor por defecto | Descripción |
+|-----------|-------------------|-------------|
+| `OLLAMA_URL` | `http://localhost:11434` | URL del servidor Ollama |
+| `MODEL` | `gemma3:12b` | Modelo a usar |
+| `MAX_HISTORY` | `10` | Máximo de mensajes del historial enviados a Ollama |
+| `num_ctx` | `8192` | Context window en tokens (en `options` del payload) |
+
+Puertos:
+
+| Servicio | Puerto | Dónde cambiar |
+|----------|--------|---------------|
+| Backend | `8000` | argumento `--port` en uvicorn |
+| Frontend | `5173` | `vite.config.js` → `server.port` |
 
 ---
 
@@ -114,7 +141,7 @@ Por defecto los servicios corren en estos puertos. Si necesitas cambiarlos:
 ```
 verbalis/
 ├── backend/
-│   ├── main.py              # API FastAPI (health + chat)
+│   ├── main.py              # API FastAPI — chat streaming, memoria de sesión
 │   ├── requirements.txt
 │   └── venv/                # Entorno virtual (ignorado en git)
 ├── frontend/
@@ -126,20 +153,23 @@ verbalis/
 │   │   └── components/
 │   │       ├── Sidebar.jsx
 │   │       └── modules/
-│   │           ├── Chatbot.jsx
+│   │           ├── Chatbot.jsx        # Streaming, memoria, Markdown, bilingüe
 │   │           ├── Dictionary.jsx
 │   │           ├── LearningObjects.jsx
 │   │           └── PDF.jsx
+│   ├── tailwind.config.js   # Incluye animación fade-in-up
 │   ├── vite.config.js       # Proxy /api → backend
 │   └── package.json
-├── inference_rules.json     # Reglas de inferencia (no modificar)
-├── software_engineering.json # Ontología (no modificar)
+├── inference_rules.json     # Reglas de inferencia
+├── software_engineering.json # Ontología base
+├── .gitignore
+├── README.md
 └── README_DEV.md
 ```
 
 ---
 
-## 7. Comandos de verificación rápida
+## 7. Verificación rápida
 
 Con los tres servicios corriendo (Ollama + backend + frontend):
 
@@ -147,15 +177,22 @@ Con los tres servicios corriendo (Ollama + backend + frontend):
 # Verificar backend
 curl http://localhost:8000/health
 
-# Probar chat desde terminal
+# Probar chat (respuesta en streaming)
 curl -X POST http://localhost:8000/api/chat \
   -H "Content-Type: application/json" \
-  -d '{"message": "What is an API?", "career": "software_engineering"}'
+  -d '{"message": "What is an API?", "career": "software_engineering", "session_id": "test-session-1"}'
+
+# Limpiar sesión
+curl -X POST http://localhost:8000/api/chat/clear \
+  -H "Content-Type: application/json" \
+  -d '{"session_id": "test-session-1"}'
 ```
 
 ---
 
 ## Notas del equipo
 
-- Los archivos `inference_rules.json` y `software_engineering.json` en la raíz son la base de conocimiento del proyecto. No modificarlos directamente; extender la ontología siguiendo el formato `version + terms[]` ya establecido.
+- Los archivos `inference_rules.json` y `software_engineering.json` en la raíz son la base de conocimiento del proyecto. No modificarlos directamente; extender la ontología siguiendo el formato ya establecido.
 - El `venv/` del backend está excluido de git. Cada integrante debe crearlo localmente con los pasos del punto 2.
+- El historial de sesión del chatbot es **en memoria**: se pierde al reiniciar el backend. Para persistencia real se necesitaría una base de datos.
+- La carpeta `.claude/` está excluida de git (configuración del editor).
