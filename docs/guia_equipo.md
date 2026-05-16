@@ -37,7 +37,7 @@ python -m venv venv
 source venv/bin/activate
 
 # Instalar dependencias (solo la primera vez)
-pip install fastapi uvicorn httpx
+pip install -r requirements.txt
 
 # Iniciar el servidor
 uvicorn main:app --reload --port 8000
@@ -111,7 +111,7 @@ Cada router usa `APIRouter(prefix="/api")` para que sus rutas queden bajo `/api/
 # backend/main.py  — estado actual
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import chat
+from routers import chat, dictionary, learning, pdf
 
 app = FastAPI(title="Verbalis API")
 
@@ -123,22 +123,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(chat.router)
+app.include_router(chat.router,       tags=["Chat"])
+app.include_router(dictionary.router, prefix="/api/dictionary", tags=["Dictionary"])
+app.include_router(learning.router,   prefix="/api/learning",   tags=["Learning"])
+app.include_router(pdf.router,        prefix="/api/pdf",        tags=["PDF"])
 
 @app.get("/health")
 async def health():
     return {"status": "ok"}
 ```
 
-Para registrar tu router, agrega **dos líneas**:
-
-```python
-from routers import chat
-from routers import dictionary        # ← línea 1: tu import
-
-app.include_router(chat.router)
-app.include_router(dictionary.router) # ← línea 2: registro
-```
+> Los 4 routers ya están registrados. **No necesitas modificar `main.py`** — solo trabaja en tu archivo en `routers/` y tu componente en `frontend/src/components/modules/`.
 
 Verifica que tus rutas quedaron registradas:
 ```bash

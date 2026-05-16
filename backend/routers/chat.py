@@ -12,7 +12,7 @@ load_dotenv()
 router = APIRouter(prefix="/api")
 
 OLLAMA_URL = "http://localhost:11434"
-MODEL = os.getenv("OLLAMA_MODEL", "gemma3:12b")
+MODEL = os.getenv("OLLAMA_MODEL", "gemma4:31b-cloud")
 MAX_HISTORY = 10
 
 BILINGUAL_RULES = (

@@ -22,8 +22,10 @@ verbalis/
 │   │   ├── learning.py                # /api/learning (esqueleto listo)
 │   │   └── pdf.py                     # /api/pdf (esqueleto listo)
 │   ├── knowledge_base/
-│   │   ├── software_engineering.json  # Ontología — términos, relaciones, categorías
-│   │   └── inference_rules.json       # Reglas de inferencia
+│   │   ├── software_engineering.json    # Ontología — Ingeniería de Software
+│   │   ├── electronics_engineering.json # Ontología — Ingeniería Electrónica
+│   │   ├── civil_engineering.json       # Ontología — Ingeniería Civil
+│   │   └── inference_rules.json         # Reglas de inferencia
 │   ├── .env                           # variables locales (ignorado en git)
 │   ├── .env.example                   # plantilla del .env
 │   └── venv/                          # ignorado en git
@@ -135,7 +137,7 @@ El módulo de aprendizaje infiere el nivel del usuario en base a su historial de
 | Renderizado Markdown | react-markdown |
 | Backend | FastAPI (Python 3.11+) |
 | Cliente HTTP async | httpx |
-| IA local | Ollama + Gemma 3 12B |
+| IA local | Ollama + Gemma 4 31B (cloud, default) |
 | Base de conocimiento | JSON estructurado (ontología) |
 | Visor PDF | pdf.js |
 | Control de versiones | Git + GitHub |
@@ -201,12 +203,6 @@ Abrir **http://localhost:5173**
 3. **Commits descriptivos:** `feat: agregar búsqueda por categoría en diccionario`
 4. **Si algo de la base no está listo**, avisa al coordinador, no lo inventes por tu cuenta
 5. **Cada módulo tiene su propio router** en `/backend/routers/` y su propia carpeta en `/frontend/src/components/modules/`
-6. **Preguntas técnicas** → abrir un Issue en GitHub
-
----
-
-*Verbalis — Base de Conocimiento aplicada al aprendizaje de inglés técnico*
-nd/src/components/modules/`
 6. **Preguntas técnicas** → abrir un Issue en GitHub
 
 ---

@@ -108,7 +108,7 @@ El proxy de Vite redirige `/api/*` → `http://localhost:8000` automáticamente.
 
 ```
 Landing  →  Selección de carrera  →  App principal
-  /              /career                /app
+  /             /carreras               /app
 ```
 
 Desde `/app` el sidebar permite navegar entre:
@@ -167,7 +167,10 @@ verbalis/
 │   ├── main.py                        # FastAPI: app, CORS, include_router, /health
 │   ├── routers/
 │   │   ├── __init__.py
-│   │   └── chat.py                    # /api/chat (streaming) y /api/chat/clear
+│   │   ├── chat.py                    # /api/chat (streaming) y /api/chat/clear
+│   │   ├── dictionary.py              # /api/dictionary (esqueleto listo)
+│   │   ├── learning.py                # /api/learning (esqueleto listo)
+│   │   └── pdf.py                     # /api/pdf (esqueleto listo)
 │   ├── knowledge_base/
 │   │   ├── software_engineering.json  # Ontología — Ingeniería de Software
 │   │   ├── electronics_engineering.json # Ontología — Ingeniería Electrónica
