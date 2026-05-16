@@ -17,7 +17,10 @@ verbalis/
 ├── backend/
 │   ├── main.py                        # FastAPI: configuración, CORS, registro de routers
 │   ├── routers/
-│   │   └── chat.py                    # /api/chat (streaming) y /api/chat/clear
+│   │   ├── chat.py                    # /api/chat (streaming)
+│   │   ├── dictionary.py              # /api/dictionary (esqueleto listo)
+│   │   ├── learning.py                # /api/learning (esqueleto listo)
+│   │   └── pdf.py                     # /api/pdf (esqueleto listo)
 │   ├── knowledge_base/
 │   │   ├── software_engineering.json  # Ontología — términos, relaciones, categorías
 │   │   └── inference_rules.json       # Reglas de inferencia
@@ -61,10 +64,10 @@ verbalis/
 ## Cronograma
 
 ### Semana 1 — Fundamentos
-- [ ] Todos: clonar el repo, instalar dependencias, correr el proyecto base
-- [ ] Base: montar FastAPI + React + Ollama funcionando juntos
-- [ ] Base: ontología inicial lista con al menos 3 carreras (Software, Electrónica, una más)
-- [ ] Módulos 1-4: diseño de su interfaz (pueden usar Figma o dibujo a mano)
+- [x] Todos: clonar el repo, instalar dependencias, correr el proyecto base
+- [x] Base: montar FastAPI + React + Ollama funcionando juntos
+- [x] Base: ontología inicial lista con al menos 3 carreras (Software, Electrónica, Civil)
+- [x] Módulos 1-4: diseño de su interfaz (pueden usar Figma o dibujo a mano)
 
 ### Semana 2 — Implementación
 - [ ] Cada persona implementa su módulo sobre la base
@@ -198,6 +201,12 @@ Abrir **http://localhost:5173**
 3. **Commits descriptivos:** `feat: agregar búsqueda por categoría en diccionario`
 4. **Si algo de la base no está listo**, avisa al coordinador, no lo inventes por tu cuenta
 5. **Cada módulo tiene su propio router** en `/backend/routers/` y su propia carpeta en `/frontend/src/components/modules/`
+6. **Preguntas técnicas** → abrir un Issue en GitHub
+
+---
+
+*Verbalis — Base de Conocimiento aplicada al aprendizaje de inglés técnico*
+nd/src/components/modules/`
 6. **Preguntas técnicas** → abrir un Issue en GitHub
 
 ---

@@ -169,7 +169,9 @@ verbalis/
 │   │   ├── __init__.py
 │   │   └── chat.py                    # /api/chat (streaming) y /api/chat/clear
 │   ├── knowledge_base/
-│   │   ├── software_engineering.json  # Ontología de términos técnicos
+│   │   ├── software_engineering.json  # Ontología — Ingeniería de Software
+│   │   ├── electronics_engineering.json # Ontología — Ingeniería Electrónica
+│   │   ├── civil_engineering.json      # Ontología — Ingeniería Civil
 │   │   └── inference_rules.json       # Reglas de inferencia
 │   ├── .env                           # variables de entorno locales (ignorado en git)
 │   ├── .env.example                   # plantilla — copiar como .env al clonar
@@ -202,14 +204,16 @@ verbalis/
 
 ## 7. Agregar tu módulo al proyecto
 
-Cada integrante trabaja en su propio router (backend) y componente (frontend) sin tocar el código de los demás.
+Como coordinador, ya he creado y registrado los routers básicos. Solo tienes que trabajar en tu archivo asignado:
 
-| Tarea | Archivo a crear / modificar |
+| Tarea | Archivo a modificar |
 |---|---|
-| Nuevo endpoint | `backend/routers/<tu_modulo>.py` |
-| Registrar router | `backend/main.py` — dos líneas (avisa antes de tocar este archivo) |
-| Nuevo componente | `frontend/src/components/modules/<TuModulo>.jsx` |
-| Leer la ontología | `backend/knowledge_base/software_engineering.json` |
+| Lógica Diccionario | `backend/routers/dictionary.py` |
+| Lógica Aprendizaje | `backend/routers/learning.py` |
+| Lógica PDF | `backend/routers/pdf.py` |
+| Nuevo componente UI | `frontend/src/components/modules/<TuModulo>.jsx` |
+
+Ya no es necesario modificar `backend/main.py`.
 
 Ver [docs/guia_equipo.md](./docs/guia_equipo.md) para ejemplos de código paso a paso.
 

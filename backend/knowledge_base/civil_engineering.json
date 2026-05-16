@@ -1,0 +1,107 @@
+{
+  "domain": "civil_engineering",
+  "label": "Ingeniería Civil",
+  "version": "1.0.0",
+  "terms": [
+    {
+      "id": "term_c001",
+      "term": "Concrete",
+      "full_form": null,
+      "definition_en": "A composite building material made from a mixture of aggregate, cement, and water.",
+      "definition_es": "Un material de construcción compuesto hecho de una mezcla de agregados, cemento y agua.",
+      "category": "materials",
+      "difficulty": "beginner",
+      "related_terms": ["term_c002", "term_c003"],
+      "examples": [
+        "Reinforced concrete is used for the building foundation.",
+        "The concrete must cure for several days to reach its full strength."
+      ],
+      "tags": ["materials", "construction", "structure"]
+    },
+    {
+      "id": "term_c002",
+      "term": "Foundation",
+      "full_form": null,
+      "definition_en": "The lower portion of a building structure that transfers its gravity loads to the earth.",
+      "definition_es": "La parte inferior de la estructura de un edificio que transfiere sus cargas de gravedad a la tierra.",
+      "category": "structures",
+      "difficulty": "beginner",
+      "related_terms": ["term_c001", "term_c005"],
+      "examples": [
+        "A deep foundation is required due to the soft soil conditions.",
+        "The foundation supports the entire weight of the skyscraper."
+      ],
+      "tags": ["structures", "design", "building"]
+    },
+    {
+      "id": "term_c003",
+      "term": "Cement",
+      "full_form": null,
+      "definition_en": "A binder, a substance used for construction that sets, hardens, and adheres to other materials.",
+      "definition_es": "Un aglomerante, una sustancia utilizada para la construcción que fragua, se endurece y se adhiere a otros materiales.",
+      "category": "materials",
+      "difficulty": "beginner",
+      "related_terms": ["term_c001"],
+      "examples": [
+        "Portland cement is the most common type of cement in general usage.",
+        "Mix the cement with water to create a paste."
+      ],
+      "tags": ["materials", "chemistry", "binder"]
+    },
+    {
+      "id": "term_c004",
+      "term": "Topography",
+      "full_form": null,
+      "definition_en": "The study of the forms and features of land surfaces, including their elevation and natural landmarks.",
+      "definition_es": "El estudio de las formas y características de las superficies terrestres, incluyendo su elevación y puntos de referencia naturales.",
+      "category": "surveying",
+      "difficulty": "intermediate",
+      "related_terms": ["term_c005"],
+      "examples": [
+        "A topography survey is needed before designing the road.",
+        "The topography of the site is very uneven."
+      ],
+      "tags": ["surveying", "land", "mapping"]
+    },
+    {
+      "id": "term_c005",
+      "term": "Load-bearing wall",
+      "full_form": null,
+      "definition_en": "A wall that is an active structural element of a building, bearing the weight of the elements above it.",
+      "definition_es": "Un muro que es un elemento estructural activo de un edificio, soportando el peso de los elementos sobre él.",
+      "category": "structures",
+      "difficulty": "intermediate",
+      "related_terms": ["term_c002"],
+      "examples": [
+        "You cannot remove that load-bearing wall without compromising the structure.",
+        "The load-bearing walls distribute the roof's weight to the foundation."
+      ],
+      "tags": ["structures", "load", "design"]
+    }
+  ],
+  "categories": {
+    "materials": "Substances used for building and construction",
+    "structures": "Arrangement of and relations between the parts or elements of something complex",
+    "surveying": "Technique of determining the terrestrial or three-dimensional positions of points"
+  },
+  "inference_rules": [
+    {
+      "rule_id": "rule_001",
+      "description": "If a user searches for a term, suggest all directly related terms",
+      "condition": "user_searches(term_X)",
+      "action": "suggest(term_X.related_terms)"
+    },
+    {
+      "rule_id": "rule_002",
+      "description": "If a term has difficulty=beginner, prioritize showing it before intermediate ones",
+      "condition": "search_results_contain_multiple_difficulties",
+      "action": "sort_by(difficulty: ['beginner', 'intermediate', 'advanced'])"
+    },
+    {
+      "rule_id": "rule_003",
+      "description": "If two terms share the same category, they are contextually related",
+      "condition": "term_X.category == term_Y.category",
+      "action": "mark_as_contextually_related(term_X, term_Y)"
+    }
+  ]
+}

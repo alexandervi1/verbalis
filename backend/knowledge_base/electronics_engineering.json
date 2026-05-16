@@ -1,0 +1,108 @@
+{
+  "domain": "electronics_engineering",
+  "label": "Ingeniería Electrónica",
+  "version": "1.0.0",
+  "terms": [
+    {
+      "id": "term_e001",
+      "term": "PCB",
+      "full_form": "Printed Circuit Board",
+      "definition_en": "A board made of insulating material used to mechanically support and electrically connect electronic components.",
+      "definition_es": "Una placa hecha de material aislante utilizada para soportar mecánicamente y conectar eléctricamente componentes electrónicos.",
+      "category": "hardware",
+      "difficulty": "beginner",
+      "related_terms": ["term_e002", "term_e004"],
+      "examples": [
+        "The motherboard of a computer is a large PCB.",
+        "We need to design a new PCB layout for the sensor module."
+      ],
+      "tags": ["hardware", "design", "components"]
+    },
+    {
+      "id": "term_e002",
+      "term": "Resistor",
+      "full_form": null,
+      "definition_en": "A passive two-terminal electrical component that implements electrical resistance as a circuit element.",
+      "definition_es": "Un componente eléctrico pasivo de dos terminales que implementa resistencia eléctrica como un elemento del circuito.",
+      "category": "components",
+      "difficulty": "beginner",
+      "related_terms": ["term_e003"],
+      "examples": [
+        "Add a 10k ohm resistor to limit the current through the LED.",
+        "Resistors are color-coded to indicate their resistance value."
+      ],
+      "tags": ["components", "circuits", "passive"]
+    },
+    {
+      "id": "term_e003",
+      "term": "Voltage",
+      "full_form": null,
+      "definition_en": "The difference in electric potential between two points, which drives electrical current.",
+      "definition_es": "La diferencia de potencial eléctrico entre dos puntos, que impulsa la corriente eléctrica.",
+      "category": "theory",
+      "difficulty": "beginner",
+      "related_terms": ["term_e002"],
+      "examples": [
+        "The battery provides a voltage of 9V.",
+        "High voltage can be dangerous if not handled properly."
+      ],
+      "tags": ["theory", "power", "electricity"]
+    },
+    {
+      "id": "term_e004",
+      "term": "Microcontroller",
+      "full_form": null,
+      "definition_en": "A compact integrated circuit designed to govern a specific operation in an embedded system.",
+      "definition_es": "Un circuito integrado compacto diseñado para gobernar una operación específica en un sistema embebido.",
+      "category": "hardware",
+      "difficulty": "intermediate",
+      "related_terms": ["term_e001", "term_e005"],
+      "examples": [
+        "An Arduino board uses a microcontroller to read sensors.",
+        "The microcontroller processes the inputs and controls the motors."
+      ],
+      "tags": ["hardware", "embedded", "control"]
+    },
+    {
+      "id": "term_e005",
+      "term": "Oscilloscope",
+      "full_form": null,
+      "definition_en": "A type of electronic test instrument that graphically displays varying electrical voltages as a two-dimensional plot.",
+      "definition_es": "Un tipo de instrumento de prueba electrónico que muestra gráficamente voltajes eléctricos variables como un trazado bidimensional.",
+      "category": "tools",
+      "difficulty": "intermediate",
+      "related_terms": ["term_e003"],
+      "examples": [
+        "Use the oscilloscope to measure the signal frequency.",
+        "The oscilloscope showed a noisy waveform on the output."
+      ],
+      "tags": ["tools", "testing", "measurement"]
+    }
+  ],
+  "categories": {
+    "hardware": "Physical parts of electronic systems",
+    "components": "Basic discrete devices or physical entities in an electronic system",
+    "theory": "Fundamental principles of electricity and electronics",
+    "tools": "Instruments used for testing and measurement"
+  },
+  "inference_rules": [
+    {
+      "rule_id": "rule_001",
+      "description": "If a user searches for a term, suggest all directly related terms",
+      "condition": "user_searches(term_X)",
+      "action": "suggest(term_X.related_terms)"
+    },
+    {
+      "rule_id": "rule_002",
+      "description": "If a term has difficulty=beginner, prioritize showing it before intermediate ones",
+      "condition": "search_results_contain_multiple_difficulties",
+      "action": "sort_by(difficulty: ['beginner', 'intermediate', 'advanced'])"
+    },
+    {
+      "rule_id": "rule_003",
+      "description": "If two terms share the same category, they are contextually related",
+      "condition": "term_X.category == term_Y.category",
+      "action": "mark_as_contextually_related(term_X, term_Y)"
+    }
+  ]
+}
