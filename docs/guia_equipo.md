@@ -65,41 +65,34 @@ Abre **http://localhost:5173** en el navegador.
 
 ## 2. Crear tu router en `/backend/routers/`
 
-Cada módulo tiene su propio archivo en `routers/`. El patrón es el mismo que `chat.py`.
+Cada módulo tiene su propio archivo en `routers/`. El diccionario ya está implementado — úsalo como referencia.
 
-### Ejemplo: `routers/dictionary.py`
+> **Referencia:** Ver `backend/routers/dictionary.py` para el patrón completo: carga de ontología por carrera, validación de estructura y manejo de errores.
+
+### Ejemplo para módulos pendientes: `routers/learning.py`
 
 ```python
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, Query
 from pathlib import Path
 import json
 
-router = APIRouter(prefix="/api")
+router = APIRouter()
 
-# Carga la ontología una sola vez al iniciar el servidor
-_KB_PATH = Path(__file__).parent.parent / "knowledge_base" / "software_engineering.json"
-with open(_KB_PATH, encoding="utf-8") as f:
-    _KNOWLEDGE_BASE = json.load(f)
+KB_PATH = Path(__file__).parent.parent / "knowledge_base"
 
+@router.get("/terms")
+async def get_terms(career: str = Query(...)):
+    file_path = KB_PATH / f"{career}.json"
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail=f"Carrera '{career}' no encontrada.")
+    with open(file_path, encoding="utf-8") as f:
+        data = json.load(f)
+    return {"terms": data.get("terms", [])}
 
-@router.get("/dictionary/terms")
-async def get_terms(career: str = "software_engineering"):
-    # Por ahora solo tenemos software_engineering; en el futuro cargar por carrera
-    terms = _KNOWLEDGE_BASE.get("terms", [])
-    return {"career": career, "terms": terms}
-
-
-@router.get("/dictionary/terms/{term_id}")
-async def get_term(term_id: str):
-    terms = _KNOWLEDGE_BASE.get("terms", [])
-    term = next((t for t in terms if t["id"] == term_id), None)
-    if term is None:
-        from fastapi import HTTPException
-        raise HTTPException(status_code=404, detail=f"Término '{term_id}' no encontrado")
-    return term
+# Agrega aquí tus endpoints de lecciones, quizes, etc.
 ```
 
-Cada router usa `APIRouter(prefix="/api")` para que sus rutas queden bajo `/api/`.
+Los routers no llevan `prefix` propio — el prefijo (`/api/learning`, `/api/pdf`) ya está configurado en `main.py`.
 
 ---
 
@@ -149,23 +142,28 @@ curl http://localhost:8000/openapi.json | python -m json.tool | grep '"path"'
 
 ### Estructura mínima
 
-Todos los componentes de módulo reciben la prop `career` con el valor `"software_engineering"` o `"electronics"`. Úsala para filtrar el contenido.
+Todos los componentes de módulo reciben la prop `career` con uno de estos valores: `"software_engineering"`, `"electronics_engineering"` o `"civil_engineering"`. Úsala para filtrar el contenido.
+
+> **Referencia:** Ver `frontend/src/components/modules/Dictionary.jsx` para el patrón completo: fetch de la API, estados de carga/error y renderizado de términos.
 
 ```jsx
-// frontend/src/components/modules/Dictionary.jsx  — estado actual (placeholder)
-import { useState } from 'react'
+// Estructura mínima para módulos pendientes (LearningObjects, PDF)
+import { useState, useEffect } from 'react'
 
-export default function Dictionary({ career }) {
-  const [query, setQuery] = useState('')
+export default function LearningObjects({ career }) {
+  const [terms, setTerms] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch(`/api/learning/terms?career=${career}`)
+      .then(res => res.json())
+      .then(data => { setTerms(data.terms); setLoading(false) })
+  }, [career])
+
+  if (loading) return <div className="p-6 text-slate-400">Cargando...</div>
 
   return (
     <div className="p-6 max-w-3xl mx-auto w-full">
-      <div className="mb-6">
-        <h2 className="text-xl font-semibold text-blue-300">Diccionario</h2>
-        <p className="text-xs text-slate-400 mt-0.5">
-          Busca términos técnicos en inglés de tu área de especialización
-        </p>
-      </div>
       {/* tu implementación aquí */}
     </div>
   )

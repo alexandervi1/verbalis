@@ -66,6 +66,7 @@ El backend queda disponible en **http://localhost:8000**
 | `GET` | `/health` | Verificación de estado |
 | `POST` | `/api/chat` | Chat con streaming — ver body abajo |
 | `POST` | `/api/chat/clear` | Limpia el historial de una sesión |
+| `GET` | `/api/dictionary/terms?career=...` | Términos y categorías de la ontología por carrera |
 
 **Body de `/api/chat`:**
 ```json
@@ -111,9 +112,11 @@ Landing  →  Selección de carrera  →  App principal
   /             /carreras               /app
 ```
 
+Carreras disponibles: `software_engineering`, `electronics_engineering`, `civil_engineering`.
+
 Desde `/app` el sidebar permite navegar entre:
-- **Diccionario** — búsqueda de términos técnicos
-- **Chatbot** — chat con gemma4:31b-cloud (default), system prompt bilingüe adaptado a la carrera
+- **Diccionario** — búsqueda de términos técnicos con filtros y toggle EN/ES ✅
+- **Chatbot** — chat con gemma4:31b-cloud (default), system prompt bilingüe adaptado a la carrera ✅
 - **Objetos de aprendizaje** — lecciones y ejercicios
 - **PDF** — visor de documentos técnicos
 
@@ -167,8 +170,8 @@ verbalis/
 │   ├── main.py                        # FastAPI: app, CORS, include_router, /health
 │   ├── routers/
 │   │   ├── __init__.py
-│   │   ├── chat.py                    # /api/chat (streaming) y /api/chat/clear
-│   │   ├── dictionary.py              # /api/dictionary (esqueleto listo)
+│   │   ├── chat.py                    # /api/chat y /api/chat/clear — implementado
+│   │   ├── dictionary.py              # /api/dictionary/terms — implementado
 │   │   ├── learning.py                # /api/learning (esqueleto listo)
 │   │   └── pdf.py                     # /api/pdf (esqueleto listo)
 │   ├── knowledge_base/
@@ -188,8 +191,8 @@ verbalis/
 │   │   └── components/
 │   │       ├── Sidebar.jsx
 │   │       └── modules/
-│   │           ├── Chatbot.jsx        # streaming, memoria, Markdown, bilingüe
-│   │           ├── Dictionary.jsx
+│   │           ├── Chatbot.jsx        # streaming, memoria, Markdown, bilingüe — implementado
+│   │           ├── Dictionary.jsx     # búsqueda, filtros, EN/ES, INF_001, INF_002 — implementado
 │   │           ├── LearningObjects.jsx
 │   │           └── PDF.jsx
 │   ├── tailwind.config.js             # animación fade-in-up
@@ -209,12 +212,12 @@ verbalis/
 
 Como coordinador, ya he creado y registrado los routers básicos. Solo tienes que trabajar en tu archivo asignado:
 
-| Tarea | Archivo a modificar |
-|---|---|
-| Lógica Diccionario | `backend/routers/dictionary.py` |
-| Lógica Aprendizaje | `backend/routers/learning.py` |
-| Lógica PDF | `backend/routers/pdf.py` |
-| Nuevo componente UI | `frontend/src/components/modules/<TuModulo>.jsx` |
+| Tarea | Archivo a modificar | Estado |
+|---|---|---|
+| Lógica Diccionario | `backend/routers/dictionary.py` | ✅ implementado |
+| Lógica Aprendizaje | `backend/routers/learning.py` | pendiente |
+| Lógica PDF | `backend/routers/pdf.py` | pendiente |
+| Nuevo componente UI | `frontend/src/components/modules/<TuModulo>.jsx` | — |
 
 Ya no es necesario modificar `backend/main.py`.
 
@@ -239,6 +242,9 @@ curl -X POST http://localhost:8000/api/chat \
 curl -X POST http://localhost:8000/api/chat/clear \
   -H "Content-Type: application/json" \
   -d '{"session_id": "test-session-1"}'
+
+# Probar diccionario
+curl "http://localhost:8000/api/dictionary/terms?career=software_engineering"
 ```
 
 ---

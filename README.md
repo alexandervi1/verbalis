@@ -17,8 +17,8 @@ verbalis/
 ├── backend/
 │   ├── main.py                        # FastAPI: configuración, CORS, registro de routers
 │   ├── routers/
-│   │   ├── chat.py                    # /api/chat (streaming)
-│   │   ├── dictionary.py              # /api/dictionary (esqueleto listo)
+│   │   ├── chat.py                    # /api/chat (streaming) — implementado
+│   │   ├── dictionary.py              # /api/dictionary/terms — implementado
 │   │   ├── learning.py                # /api/learning (esqueleto listo)
 │   │   └── pdf.py                     # /api/pdf (esqueleto listo)
 │   ├── knowledge_base/
@@ -39,7 +39,7 @@ verbalis/
 │           ├── Sidebar.jsx
 │           └── modules/
 │               ├── Chatbot.jsx          # Módulo 2 — implementado
-│               ├── Dictionary.jsx       # Módulo 1 — placeholder
+│               ├── Dictionary.jsx       # Módulo 1 — implementado
 │               ├── LearningObjects.jsx  # Módulo 3 — placeholder
 │               └── PDF.jsx              # Módulo 4 — placeholder
 ├── docs/
@@ -55,9 +55,9 @@ verbalis/
 
 | Persona | Módulo | Responsabilidad |
 |--------|--------|----------------|
-| **Alex** | Base + Coordinación | Estructura del repo, base de conocimiento (ontología), integración Ollama, sidebar |
-| **Segovia** | Diccionario | Búsqueda, visualización de términos, relaciones ontológicas |
-| **Alex** | Chatbot | Interfaz de chat, prompts, memoria de sesión |
+| **Alex** | Base + Coordinación | Estructura del repo, base de conocimiento (ontología), integración Ollama, sidebar ✅ |
+| **Segovia** | Diccionario | Búsqueda, visualización de términos, relaciones ontológicas ✅ |
+| **Alex** | Chatbot | Interfaz de chat, prompts, memoria de sesión ✅ |
 | **Omar** | Objetos de aprendizaje | Flashcards, quizes, reglas de refuerzo |
 | **Fleshman** | PDF | Visor de PDF, selección de texto, panel de definición |
 
@@ -72,9 +72,11 @@ verbalis/
 - [x] Módulos 1-4: diseño de su interfaz (pueden usar Figma o dibujo a mano)
 
 ### Semana 2 — Implementación
-- [ ] Cada persona implementa su módulo sobre la base
+- [x] Alex: Chatbot implementado (streaming, historial, Markdown, bilingüe)
+- [x] Segovia: Diccionario implementado (búsqueda, filtros, INF_001, INF_002, toggle EN/ES)
+- [ ] Omar: Objetos de aprendizaje
+- [ ] Fleshman: PDF
 - [ ] Check-in a mitad de semana: todos muestran avance
-- [ ] No bloquear a nadie: si necesitas algo de la base, pedirlo el día 1 de la semana
 
 ### Semana 3 — Integración y demo
 - [ ] Integrar todos los módulos
@@ -166,11 +168,14 @@ Abrir **http://localhost:5173**
 
 ## Módulos — Estado actual
 
-### Módulo 1: Diccionario
-- Lista de términos técnicos filtrada por carrera
-- Búsqueda en tiempo real
-- Card con: término, definición EN, botón traducir (ES), términos relacionados
-- Sin IA: solo consulta a la ontología JSON
+### Módulo 1: Diccionario ✅ implementado
+- Lista de términos técnicos filtrada por carrera (3 carreras disponibles)
+- Búsqueda en tiempo real por término, siglas y etiquetas
+- Filtros por categoría semántica
+- Panel de detalle: definición EN/ES con toggle, ejemplos de uso numerados
+- Términos relacionados navegables (Regla INF_001: sugerencia por ontología)
+- Ordenamiento automático por dificultad (Regla INF_002: beginner → intermediate → advanced)
+- Sin IA: consulta directa a la ontología JSON
 
 ### Módulo 2: Chatbot ✅ implementado
 - Respuestas en streaming en tiempo real (tokens conforme se generan)
