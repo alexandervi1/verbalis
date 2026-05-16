@@ -8,10 +8,16 @@ const careers = [
     description: 'APIs, arquitectura, patrones de diseño, DevOps, bases de datos y más.',
   },
   {
-    id: 'electronics',
-    label: 'Electrónica',
+    id: 'electronics_engineering',
+    label: 'Ingeniería Electrónica',
     icon: '⚡',
     description: 'Circuitos, microcontroladores, señales, PCB y sistemas embebidos.',
+  },
+  {
+    id: 'civil_engineering',
+    label: 'Ingeniería Civil',
+    icon: '🏗️',
+    description: 'Estructuras, materiales, topografía, geotecnia y gestión de obras.',
   },
 ]
 
